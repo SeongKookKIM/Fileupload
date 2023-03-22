@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
@@ -13,7 +13,8 @@ function App() {
     reader.readAsDataURL(file);
 
     reader.onload = () => {
-      setImageSrc(reader.result as string | null);
+      const newImageSrc = reader.result as string | null;
+      setImageSrc(newImageSrc);
     };
   };
 
@@ -27,6 +28,17 @@ function App() {
       setImageSrc(null);
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem("imageScrList", JSON.stringify(imageScrList));
+  }, [imageScrList]);
+
+  useEffect(() => {
+    const fileList = localStorage.getItem("imageScrList");
+    if (fileList) {
+      setImageScrList(JSON.parse(fileList));
+    }
+  }, []);
 
   return (
     <div className="App">
